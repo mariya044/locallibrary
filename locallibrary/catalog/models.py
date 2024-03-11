@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 class Genre(models.Model):
@@ -37,6 +38,10 @@ class Author(models.Model):
     def __str__(self):
         return f"{self.first_name}{self.last_name}{self.pseudonym}"
 
+    def get_absolute_url(self):
+        return reverse("author-detail",args=[self.pk])#authors id for href
+
+
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
@@ -45,6 +50,9 @@ class Book(models.Model):
 
     def display_genre(self):
         return ",".join([genre.name for genre in self.genre.all()])
+
+    def get_absolute_url(self):
+        return reverse("book-detail", args=[self.pk])  # authors id for href
 
     def __str__(self):
         return self.title
@@ -64,6 +72,7 @@ class BookInstance(models.Model):
     status = models.CharField(choices=STATUSES, max_length=50, default="Available")
     due_back = models.DateField(null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.book.title}{self.isbn}"
+
+
+
 
